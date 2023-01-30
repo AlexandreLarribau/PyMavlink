@@ -4,6 +4,16 @@ import pymavlink.mavutil as utility
 import pymavlink.dialects.v20.all as dialect
 #endregion
 
+#region connect to vehicle
+vehicle = utility.mavlink_connection(device="127.0.0.1:14551")
+
+# wait for a heartbeat
+vehicle.wait_heartbeat()
+
+# inform user
+print("Connected to system:", vehicle.target_system, ", component:", vehicle.target_component)
+#endregion
+
 #region initialisation
 
 # takeoff altitude definition
@@ -106,16 +116,6 @@ land_command = dialect.MAVLink_command_long_message(
             )
 #endregion
 
-#endregion
-
-#region connect to vehicle
-vehicle = utility.mavlink_connection(device="127.0.0.1:14551")
-
-# wait for a heartbeat
-vehicle.wait_heartbeat()
-
-# inform user
-print("Connected to system:", vehicle.target_system, ", component:", vehicle.target_component)
 #endregion
 
 #region change flight mode, si réussi modeok = True 
