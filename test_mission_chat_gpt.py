@@ -1,6 +1,6 @@
 import os
 import time
-import pymavlink
+import pymavlink.mavutil as utility
 
 # Connection information
 device = "udp:127.0.0.1:14551"
@@ -10,7 +10,7 @@ baudrate = 921600
 waypoints_file = "waypoints.txt"
 
 # Create the connection object
-connection = pymavlink.mavutil.mavlink_connection(device, baudrate=baudrate)
+connection = utility.mavlink_connection(device, baudrate=baudrate)
 
 # Wait for a heartbeat to confirm the connection
 while True:
@@ -30,7 +30,7 @@ waypoints = [w.strip().split(',') for w in waypoints]
 
 # Upload the waypoints to the vehicle
 for wp in waypoints:
-    wp_cmd = pymavlink.mavutil.mavlink.MAVLink_mission_item_message(
+    wp_cmd = utility.mavlink.MAVLink_mission_item_message(
         0, 0, 0, 0, 0, 0, 0,
         float(wp[0]), float(wp[1]), float(wp[2]),
         0, 0, 0, 0, 0, 0
