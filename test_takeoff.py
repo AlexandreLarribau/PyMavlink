@@ -230,26 +230,27 @@ if arm:
     # check the pre-arm
     while True:
 
-            # catch GLOBAL_POSITION_INT message
-            message = vehicle.recv_match(type=dialect.MAVLink_global_position_int_message.msgname, blocking=True)
+        # catch GLOBAL_POSITION_INT message
+        message = vehicle.recv_match(type=dialect.MAVLink_global_position_int_message.msgname,
+                                    blocking=True)
 
-            # convert message to dictionary
-            message = message.to_dict()
+        # convert message to dictionary
+        message = message.to_dict()
 
-            # get relative altitude
-            relative_altitude = message["relative_alt"] * 1e-3
+        # get relative altitude
+        relative_altitude = message["relative_alt"] * 1e-3
 
-            # print out the message
-            print("Relative Altitude", relative_altitude, "meters")
+        # print out the message
+        print("Relative Altitude", relative_altitude, "meters")
 
-            # check if reached the target altitude
-            if TAKEOFF_ALTITUDE - relative_altitude < 1:
+        # check if reached the target altitude
+        if TAKEOFF_ALTITUDE - relative_altitude < 1:
 
-                # print out that takeoff is successful
-                print("Takeoff to", TAKEOFF_ALTITUDE, "meters is successful")
+            # print out that takeoff is successful
+            print("Takeoff to", TAKEOFF_ALTITUDE, "meters is successful")
 
-                # break the loop
-                break
+            # break the loop
+            break
 
     # wait 10 seconds
     print("Waiting 10 seconds")
@@ -265,15 +266,16 @@ if arm:
     while True:
 
         # catch GLOBAL_POSITION_INT message
-        message = vehicle.recv_match(type=dialect.MAVLink_global_position_int_message.msgname, blocking=True)
+        message = vehicle.recv_match(type=dialect.MAVLink_global_position_int_message.msgname,
+                                    blocking=True)
 
-        #convert message to dictionary
+        # convert message to dictionary
         message = message.to_dict()
 
         # get relative altitude
         relative_altitude = message["relative_alt"] * 1e-3
 
-        #print out the message
+        # print out the message
         print("Relative Altitude", relative_altitude, "meters")
 
         # check if reached the target altitude
