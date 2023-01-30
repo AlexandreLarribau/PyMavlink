@@ -4,7 +4,7 @@ import pymavlink.mavutil as utility
 import pymavlink.dialects.v20.all as dialect
 
 # get the desired sequence number
-seq_desired = int(sys.argv[1])
+seq_desired = int('\t')
 
 # debug the desired sequence number
 print("Desired mission item:", seq_desired)
