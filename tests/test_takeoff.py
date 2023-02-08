@@ -23,6 +23,8 @@ TAKEOFF_ALTITUDE = 20
 VEHICLE_ARM = 1
 VEHICLE_DISARM = 0
 
+#endregion
+
 #region desired flight mode
 FLIGHT_MODE = "GUIDED"
 flight_modes = vehicle.mode_mapping()
@@ -114,9 +116,9 @@ land_command = dialect.MAVLink_command_long_message(
             param6=0,
             param7=0
             )
-#endregion
 
 #endregion
+
 
 #region change flight mode, si réussi modeok = True 
 # change flight mode
@@ -153,6 +155,7 @@ while True:
 
         # break the loop
         break
+
 #endregion
 
 #region arm vehicle, si réussi arm = True 
