@@ -1,0 +1,40 @@
+pour trouver sur quel port usb est le convertisseur usb serie dans /dev 
+si on ne trouve pas on débranche, on ouvre un cmd on tape 
+$ ls -1 /dev > dev.txt 
+on branche 
+$ ls -1 /dev > dev2.txt 
+$diff dev.txt dev2.txt 
+
+on doit voir apparaitre ttyUSB... et c'est à ce port qu'il faudra s'intéresser
+
+Pour autoriser python et débloquer les ports usb de la rpi 
+$sudo raspi-config 
+interfacing options/serial/ login shel accessible over serial : yes 
+$sudo reboot
+$dmesg |grep tty 
+doit afficher "... now attached to ttyUSB..."
+
+Accéder à une clef usb sur rpi : 
+$ df -h 
+$ cd /usb
+
+Lors de l'installation de python sur windows, bien penser à cocher la case "ajouter python au Path" !
+
+les fichiers trouvés sur github concernant les modems acoustiques waterlink sont intéressants 
+ils m'ont été pratique pour l'écriture des codes "serial_read/write" mais sont spécifiques à une 
+liaison série sur les modems M64. la connexion ne se faisant pas sans le modem, le fichier est inutilisable
+
+Le fichier joystick controle fonctionnement avec un cable RJ45 qui relie la rpi et le pc 
+il faut de plus lancer MavProxy sur la rpi avec 
+mavproxy.py --master=/dev/serial1 --baudrate=9600 --out=0.0.0.0:5760
+dans un second terminal nc -l 5760 permet de libérer le port 5760 et de se mettre en écoute sur ce port
+dans la serie des serial_read/write 
+
+la version 2 envoie en série toute la trame joystick à chaque changement d'état du joystick.
+un probleme d'axe est toujours présent en fonction du joystick utilisé. 
+
+la version 3 envoie deux octets : le premier indiquand l'index du changement et le second la nouvelle valeur 
+le joystick utilisé est le logitech F310. j'ai validé le fonctionnement entre rpi et un pc 
+
+dans tout les cas une calibration sera nécessaire en fonction du joystick utlisé pour choisir 
+les axes lus par pygame. 
