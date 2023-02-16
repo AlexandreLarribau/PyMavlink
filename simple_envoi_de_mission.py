@@ -6,7 +6,7 @@ from math import pi, sin, cos, sqrt, atan2
 #endregion
 
 #region connect to vehicle
-vehicle = utility.mavlink_connection(device="127.0.0.1:14551")
+vehicle = utility.mavlink_connection(device="tcp:127.0.0.1:5762")
 
 # wait for a heartbeat
 vehicle.wait_heartbeat()
@@ -27,7 +27,7 @@ ma_mission = (  (43.05443038, 6.12620687, 5),
 # create mission count message
 message = dialect.MAVLink_mission_count_message(target_system=vehicle.target_system,
                                                 target_component=vehicle.target_component,
-                                                count=len(target_locations) + 2,
+                                                count=len(ma_mission) + 2,
                                                 mission_type=dialect.MAV_MISSION_TYPE_MISSION)
 
 #endregion
@@ -87,9 +87,9 @@ while True:
                         param2=0,
                         param3=0,
                         param4=0,
-                        x=int(target_locations[seq - 2][0] * 1e7),
-                        y=int(target_locations[seq - 2][1] * 1e7),
-                        z=target_locations[seq - 2][2],
+                        x=int(ma_mission[seq - 2][0] * 1e7),
+                        y=int(ma_mission[seq - 2][1] * 1e7),
+                        z=ma_mission[seq - 2][2],
                         mission_type=dialect.MAV_MISSION_TYPE_MISSION)
 
             # send the mission item int message to the vehicle

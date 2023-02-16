@@ -6,7 +6,8 @@ from math import pi, sin, cos, sqrt, atan2
 #endregion
 
 #region connect to vehicle
-vehicle = utility.mavlink_connection(device="127.0.0.1:14551")
+print('tentative de connexion')
+vehicle = utility.mavlink_connection(device="tcp:127.0.0.1:5762")
 
 # wait for a heartbeat
 vehicle.wait_heartbeat()
@@ -49,17 +50,16 @@ if RTL_FLIGHT_MODE not in flight_modes.keys():
 #endregion
 
 # create mission item list (put before the mavlink message)
-target_locations = ((43.053231, 6.126283, 0),
-                    (43.058248, 6.130403, 0),
-                    (43.049719, 6.128, 0))
+target_locations = (  (43.05443038, 6.12620687, 5),
+                (43.06708954, 6.12620687, 10),
+                (43.06708954, 6.11012366, 15),
+                (43.05443038, 6.11012366, 10),
+                (43.05443038, 6.12620687, 5)   )
 
 #region messages mavlink 
 
-# arm disarm definitions
-VEHICLE_ARM = 1
-VEHICLE_DISARM = 0
-
 #create arm message
+VEHICLE_ARM = 1
 vehicle_arm_message = dialect.MAVLink_command_long_message(
     target_system=vehicle.target_system,
     target_component=vehicle.target_component,
@@ -75,6 +75,7 @@ vehicle_arm_message = dialect.MAVLink_command_long_message(
 )
 
 #create disarm message
+VEHICLE_DISARM = 0
 vehicle_disarm_message = dialect.MAVLink_command_long_message(
     target_system=vehicle.target_system,
     target_component=vehicle.target_component,
@@ -139,9 +140,6 @@ message = dialect.MAVLink_mission_count_message(target_system=vehicle.target_sys
 #endregion
 
 #region initialisation
-
-# takeoff altitude definition
-TAKEOFF_ALTITUDE = 20
 
 # arm disarm definitions
 VEHICLE_ARM = 1
@@ -349,11 +347,15 @@ while True:
 #region détection de fin de mission et RTL
 
 while True:
-    print ("trajet en cours")
-    if message.seq == target_locations.count - 1 : 
-        break
-    time.sleep(1)
+    current_item_msg = vehicle.recv_match(type='MISSION_CURRENT', blocking=True)
+    if current_item_msg:
+        current_item = current_item_msg.seq
+        mission_length = len(target_locations)
 
+        if current_item >= mission_length:
+            print("Mission complete")
+            break
+        
 #region change flight mode
 vehicle.mav.send(set_rtl_mode_message)
 

@@ -20,6 +20,8 @@ $ cd /usb
 
 Lors de l'installation de python sur windows, bien penser à cocher la case "ajouter python au Path" !
 
+Penser à débrancher le convertisseur usb serie avant d'allumer la rpi
+
 les fichiers trouvés sur github concernant les modems acoustiques waterlink sont intéressants 
 ils m'ont été pratique pour l'écriture des codes "serial_read/write" mais sont spécifiques à une 
 liaison série sur les modems M64. la connexion ne se faisant pas sans le modem, le fichier est inutilisable
@@ -38,3 +40,16 @@ le joystick utilisé est le logitech F310. j'ai validé le fonctionnement entre 
 
 dans tout les cas une calibration sera nécessaire en fonction du joystick utlisé pour choisir 
 les axes lus par pygame. 
+
+La version 4 apporte pas mal de changements : 
+sur le reader, il transmet les ordres sur les RC 1 et 3 d'un vehicule 
+en s'y connectant en tcp avec mavproxy. le joystick est tres tres reactif, des calibrations 
+seront necessaires mais la transmission fonctionne. J'ai même réussi à définir des boutons qui 
+changent le mode en direct.
+
+sur le writer on va compter le nombre de packets envoyés par secondes (donc 2 octets * nbre)
+j'ai également récupéré le baudrate afin de limiter le nombre de packets envoyé. pour déterminer
+ce nombre je prend le baudrate, je divise par 8 pour avoir le nombre d'octets envoyable par sec
+puis j'ajoute une marge de 80% et enfin je divise par 2 car il y a 2 octets par paquets. 
+Le délai d'envoi entre deux packets est donc 1/(((br/8)*0.8)/2)=20/br en simplifiant. ce délai est mis 
+après chaque envoi de packet ce qui permet de limiter le nombre d'envoi par sec en fonction du br

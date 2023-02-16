@@ -3,8 +3,8 @@ import serial
 import struct
 import pygame
 
-ser = serial.Serial(port='/dev/ttyUSB0', 
-		    baudrate="9600",
+ser = serial.Serial(port='COM6', 
+		    baudrate="300",
 		    parity=serial.PARITY_NONE,
 		    stopbits=serial.STOPBITS_ONE,
 		    bytesize=serial.EIGHTBITS,
@@ -65,7 +65,6 @@ while True:
             for i in range (4):
                 data[4+i] = joystick.get_button(i)
             
-
     # noticing change in joystick data
     change=False
     number = -1
