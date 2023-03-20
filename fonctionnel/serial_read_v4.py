@@ -17,7 +17,7 @@ def from_8_bits_to_PWM(val):
 fmt = "!bb"
 
 #ouverture du port serie
-ser = serial.Serial(port='COM6',
+ser = serial.Serial(port='COM3',
 		    baudrate = 300,
 		    parity = serial.PARITY_NONE,
 		    stopbits=serial.STOPBITS_ONE,
@@ -57,7 +57,7 @@ print("Connected to system:", vehicle.target_system, ", component:", vehicle.tar
 #region desired flight mode
 GUIDED_FLIGHT_MODE = "GUIDED"
 AUTO_FLIGHT_MODE = "AUTO"
-RTL_FLIGHT_MODE = "RTL"
+#RTL_FLIGHT_MODE = "RTL"
 MANUAL_FLIGHT_MODE = "MANUAL"
 flight_modes = vehicle.mode_mapping()
 
@@ -78,13 +78,13 @@ if AUTO_FLIGHT_MODE not in flight_modes.keys():
     # exit the code
     exit(1)
 
-if RTL_FLIGHT_MODE not in flight_modes.keys():
+#if RTL_FLIGHT_MODE not in flight_modes.keys():
 
     # inform user that desired flight mode is not supported by the vehicle
-    print(RTL_FLIGHT_MODE, "is not supported")
+ #   print(RTL_FLIGHT_MODE, "is not supported")
 
     # exit the code
-    exit(1)
+  #  exit(1)
 
 if MANUAL_FLIGHT_MODE not in flight_modes.keys():
 
@@ -157,19 +157,19 @@ set_auto_mode_message = dialect.MAVLink_command_long_message(
     param6=0,
     param7=0
 )
-set_rtl_mode_message = dialect.MAVLink_command_long_message(
-    target_system=vehicle.target_system,
-    target_component=vehicle.target_component,
-    command=dialect.MAV_CMD_DO_SET_MODE,
-    confirmation=0,
-    param1=dialect.MAV_MODE_FLAG_CUSTOM_MODE_ENABLED,
-    param2=flight_modes[RTL_FLIGHT_MODE],
-    param3=0,
-    param4=0,
-    param5=0,
-    param6=0,
-    param7=0
-)
+#set_rtl_mode_message = dialect.MAVLink_command_long_message(
+#    target_system=vehicle.target_system,
+#    target_component=vehicle.target_component,
+#    command=dialect.MAV_CMD_DO_SET_MODE,
+#    confirmation=0,
+#    param1=dialect.MAV_MODE_FLAG_CUSTOM_MODE_ENABLED,
+#    param2=flight_modes[RTL_FLIGHT_MODE],
+#    param3=0,
+#    param4=0,
+#    param5=0,
+#    param6=0,
+#    param7=0
+#)
 set_manual_mode_message = dialect.MAVLink_command_long_message(
     target_system=vehicle.target_system,
     target_component=vehicle.target_component,
@@ -310,9 +310,5 @@ while True :
                     break
 
             #endregion
-        try :
-            print('mode en cours : ', vehicle.flightmode())
-        except : 
-            print ('echec lecture')
     except :
         print ('Rien reçu') 

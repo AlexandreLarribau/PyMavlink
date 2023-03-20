@@ -14,6 +14,9 @@ $sudo reboot
 $dmesg |grep tty 
 doit afficher "... now attached to ttyUSB..."
 
+$pip install pyserial
+$pip uninstall serial
+
 Accéder à une clef usb sur rpi : 
 $ df -h 
 $ cd /usb
